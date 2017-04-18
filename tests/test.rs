@@ -277,3 +277,12 @@ fn parse_sheet_names_in_xls() {
     let mut excel = Sheets::open(&path).expect("cannot open excel file");
     assert_eq!(excel.sheet_names().unwrap(), vec!["Sheet1"]);
 }
+
+#[test]
+fn formula_xlsx() {
+    let path = format!("{}/tests/issues.xlsx", env!("CARGO_MANIFEST_DIR"));
+    let mut excel = Sheets::open(&path).expect("cannot open excel file");
+
+    let formula = excel.worksheet_formula("Sheet1").unwrap();
+    range_eq!(formula, [["=B1+OneRange".to_string()]]);
+}
